@@ -1,165 +1,150 @@
 /* ============================================================
-   STUDY MATERIAL STYLES — VERSION 1.1.4
-   RECTANGULAR CARDS + LOTTIE ANIMATIONS
-   RESPONSIVE + VIEW MORE CARD
+   STUDY MATERIAL STYLES — VERSION 2025.8
+   PERFECT CARD HEIGHT + LOTTIE NORMALIZATION + GEN-Z FEEL
    ============================================================ */
 
 :root {
   --study-bg: #f8fafc;
   --study-card-bg: #ffffff;
   --study-text: #1a202c;
-  --study-hover: #2563eb;
-  --study-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  --study-hover: #7c3aed;
+  --study-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 
-  --border-radius-lg: 16px;
+  --border-radius-lg: 20px;
 
   --font-size-md: 1rem;
-  --font-size-lg: 1.2rem;
+  --font-size-lg: 1.1rem;
 
   --spacing-md: 12px;
   --spacing-lg: 20px;
   --spacing-xl: 32px;
 
-  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
-/* ───────────────────────────────────────────────
-   SECTION CONTAINER
-─────────────────────────────────────────────── */
+/* ============ SECTION WRAPPER ============ */
 .study-material {
   background: var(--study-bg);
   padding: var(--spacing-xl);
   text-align: center;
+  margin-bottom: 40px;
 }
 
 .study-title {
   font-family: var(--font);
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin-bottom: var(--spacing-xl);
+  font-weight: 900;
+  margin-bottom: 40px;
   color: #7c3aed;
+  font-size: 2rem;
+  letter-spacing: 0.3px;
 }
 
-/* ───────────────────────────────────────────────
-   GRID LAYOUT
-─────────────────────────────────────────────── */
+/* ============ GRID ============ */
 .study-grid {
   display: grid;
-  gap: var(--spacing-xl);
-
-  /* React controls column count (via inline style) */
-  justify-content: center;   /* centers the entire grid */
-  justify-items: center;     /* centers each card inside its grid cell */
-  align-items: start;        /* keeps row alignment consistent */
+  gap: 28px;
+  justify-content: center;
+  justify-items: center;
+  align-items: stretch;     /* KEY FIX */
 }
 
-/* ───────────────────────────────────────────────
-   CARDS
-─────────────────────────────────────────────── */
+/* ============ CARD BASE ============ */
 .study-card {
   background: var(--study-card-bg);
   border-radius: var(--border-radius-lg);
   width: 100%;
-  max-width: 220px;   /* keeps consistent card width */
-  height: 160px;
+  max-width: 230px;
+  height: 200px;                 /* FORCE SAME HEIGHT */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center;       /* CENTER CONTENT */
   box-shadow: var(--study-shadow);
   cursor: pointer;
   border: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: all 0.25s ease;
+  padding: 16px;
+  position: relative;
   overflow: hidden;
 }
 
 .study-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(124, 58, 237, 0.15);
 }
 
+/* ============ LOTTIE NORMALIZER ============ */
 .study-animation {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 20px;
+  width: 140px;
+  height: 110px;           /* CONSTANT HEIGHT */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
+.study-animation > * {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 140px;
+  max-height: 110px;
+}
+
+/* ============ TEXT ============ */
 .study-label {
   font-size: var(--font-size-lg);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--study-text);
   pointer-events: none;
+  text-align: center;
+  line-height: 1.2;
+  margin-top: 6px;
 }
 
-/* ───────────────────────────────────────────────
-   VIEW MORE CARD (SPECIAL STYLE)
-─────────────────────────────────────────────── */
+/* ============ VIEW MORE TILE ============ */
 #view-more-card {
-  background: var(--study-hover);
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: white;
   font-size: var(--font-size-md);
-  font-weight: 600;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  max-width: 220px;   /* match normal card width */
+  font-weight: 700;
 }
 
 #view-more-card:hover {
-  background: #1e40af;
-  transform: translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #6d28d9, #4c1d95);
 }
 
 #view-more-card .study-label {
   color: white;
-  margin: 0;
 }
 
-/* ───────────────────────────────────────────────
-   RESPONSIVE
-─────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .study-card {
-    height: 160px;
-  }
+/* ============ RESPONSIVE ============ */
 
-  .study-animation {
-    width: 120px;
-    height: 90px;
-  }
-
-  .study-label {
-    font-size: var(--font-size-md);
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
+/* Mobile */
+@media (max-width: 640px) {
   .study-card {
     height: 180px;
   }
 
   .study-animation {
-    width: 150px;
-    height: 120px;
+    width: 120px;
+    height: 95px;
   }
 
-  .study-label {
-    font-size: var(--font-size-md);
+  .study-title {
+    font-size: 1.6rem;
   }
 }
 
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .study-card {
+    height: 190px;
+  }
+}
+
+/* Desktop */
 @media (min-width: 1025px) {
   .study-card {
     height: 200px;
-  }
-
-  .study-animation {
-    width: 170px;
-    height: 140px;
-  }
-
-  .study-label {
-    font-size: var(--font-size-md);
   }
 }

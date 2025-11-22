@@ -1,6 +1,7 @@
 /* ============================================================
    🌐 OPENROOT FOOTER — GEN-Z PREMIUM UI
    CONSISTENT BUTTONS • FUNKY • CLEAN • SCALABLE
+   VERSION 2025.8
    ============================================================ */
 
 /* ================== ROOT VARIABLES ================== */
@@ -9,7 +10,7 @@
   --bg-card: #050505;
   --bg-glass: rgba(255,255,255,0.04);
   --txt-main: #111827;
-  --txt-muted: #ba9ee2;
+  --txt-muted: #737076;
 
   --accent-main: #7c3aed;
   --accent-glow: rgba(124,58,237,0.4);
@@ -147,7 +148,7 @@
 
 /* ================== FOOTER STRIP ================== */
 .footer {
-  background: #340e56;
+  background: #000000;
   color: var(--txt-muted);
   padding: var(--space-md);
   text-align: center;

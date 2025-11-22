@@ -1,8 +1,7 @@
 // ============================================================
-// HEADER COMPONENT — VERSION 1.1.4
+// HEADER COMPONENT — VERSION 2025.8
 // CLEAN, RESPONSIVE, AND PERFORMANCE-OPTIMIZED
 // ============================================================
-// manforceutube
 
 import "../styles/Header.css"; // HEADER-SPECIFIC STYLES
 import logo from "../assets/openroot-white-nobg.png"; // COMPANY LOGO

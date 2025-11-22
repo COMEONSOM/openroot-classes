@@ -1,10 +1,9 @@
 // ============================================================
-// NETFLIX-STYLE BANNER — OPENROOT PREMIUM (SOMU EDITION 🚀)
-// - ULTRA CLEAN UI (NO 3D)
-// - AUTO ROTATE + SWIPE + KEYBOARD
+// OPENROOT BANNER 🚀
 // - ES2023+ FEATURES + ASYNC/AWAIT
 // - DSA-STYLE HELPERS (O(1) NAVIGATION)
 // - EDGE-CASE SAFE + ACCESSIBLE
+// VERSION 2025.8
 // ============================================================
 
 import React, {

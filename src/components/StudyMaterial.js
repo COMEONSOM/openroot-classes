@@ -1,5 +1,5 @@
 // ============================================================
-// STUDY MATERIAL COMPONENT — CLEAN + STABLE -- VERSION 1.1.4
+// STUDY MATERIAL COMPONENT — CLEAN + STABLE -- VERSION 2025.8
 // MAX 2 ROWS VISIBLE, VIEW-MORE TILE INSIDE GRID
 // ============================================================
 
@@ -11,13 +11,17 @@ import "../styles/StudyMaterial.css";
 // STUDY MATERIAL DATA
 // ============================================================
 import pythonAnim from "../assets/lotties/python.json";
-import CSEAnim from "../assets/lotties/cse-basics.json";
+import sqlAnim from "../assets/lotties/MySQL.json";
 import financeAnim from "../assets/lotties/finance.json";
+import CSEAnim from "../assets/lotties/cse-basics.json";
+import interviewAnim from "../assets/lotties/HR Interview.json"
 
 const studyMaterials = [
   { title: "PYTHON", link: "https://drive.google.com/drive/folders/1IQerh93elt4mBQRdRZ_42yYv4Dv0ipTm", animation: pythonAnim },
-  { title: "CSE BASICS", link: "https://drive.google.com/drive/folders/1kgOl_U_rbCHRChY2F6JdCiUW7qsEnaWt", animation: CSEAnim },
+  { title: "SQL", link: "https://drive.google.com/drive/folders/1AdrThpT8qlMxuWQenc7LF-ryW4FIpBBx", animation: sqlAnim },
   { title: "FINANCE", link: "https://drive.google.com/drive/folders/1tnPiNCIiElutXDcEveQppmMkbGp1Q8Q1", animation: financeAnim },
+  { title: "CSE BASICS", link: "https://drive.google.com/drive/folders/1kgOl_U_rbCHRChY2F6JdCiUW7qsEnaWt", animation: CSEAnim },
+  {title: "INTERVIEW Q&A", link: "https://drive.google.com/drive/folders/1CKFBndpl6IafBLBLo4ywFvbi35uMZzGJ", animation: interviewAnim },
 ];
 
 // ============================================================

@@ -1,4 +1,8 @@
+// ============================================================
+// FOOTER COMPONENT — VERSION 2025.8
 // src/components/Footer.jsx
+// ============================================================
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import '../styles/Footer.css';

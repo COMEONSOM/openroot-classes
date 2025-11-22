@@ -1,6 +1,7 @@
 /* ============================================================
    AVAILABLE COURSES — OPENROOT PREMIUM UI
    PRODUCT-GRADE UX • SCALABLE • RESPONSIVE
+   VERSION 2025.8
    ============================================================ */
 
 /* ───────── Root Theme ───────── */
@@ -31,7 +32,6 @@
 /* ───────── Container ───────── */
 .courses-container {
   width: 100%;
-  min-width: fit-content;
   max-width: 1200px;
   margin: 10px auto;
   padding: 20px 10px;
@@ -44,7 +44,7 @@
   gap: 10px;
 }
 .courses-container h2 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 800;
   color: var(--primary);
   text-align: center;
@@ -73,7 +73,7 @@
 
 /* ───────── Course Grid ───────── */
 .course-list {
-  width: 100%;
+  width: 80%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   justify-content: center;
@@ -260,26 +260,42 @@
 }
 
 /* ───────── Responsive ───────── */
-@media (max-width: 1024px) {
-  .course-list {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-}
 @media (max-width: 640px) {
   .courses-container {
     padding: 20px 14px;
   }
-
+  .courses-container h2{
+    font-size: 1.6rem;
+  }
   .course-details {
     padding: 28px 20px;
   }
-
   .qr-section {
     padding: 28px 20px;
   }
-
   .course-stepper {
     flex-wrap: wrap;
     justify-content: center;
+  }
+  .step {
+    font-size: 10px;
+    padding: 6px 14px;
+  }
+}
+@media (min-width: 641px) and (max-width: 1024px) {
+  .course-list {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .courses-container h2{
+    font-size: 1.8rem;
+  }
+  .step {
+    font-size: 12px;
+    padding: 7px 16px;
+  }
+}
+@media (min-width: 1025px) {
+   .courses-container h2{
+    font-size: 2rem;
   }
 }

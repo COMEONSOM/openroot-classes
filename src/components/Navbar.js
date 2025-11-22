@@ -1,5 +1,5 @@
 // ============================================================
-// NAVBAR COMPONENT — VERSION 1.1.4
+// NAVBAR COMPONENT — VERSION 2025.8
 // FAST, CLEAN, AND PERFORMANCE-OPTIMIZED
 // PURELY UI — LINKS TO SECTIONS WITHOUT LAG
 // ============================================================

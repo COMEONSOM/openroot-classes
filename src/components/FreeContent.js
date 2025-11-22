@@ -1,3 +1,8 @@
+// ============================================================
+// FREE CONTENT SECTION
+// VERSION 2025.8
+// ============================================================
+
 import '../styles/FreeContent.css';
 // Import thumbnail images from the assets folder
 import e1Thumbnail from '../assets/e1.avif'; // Add more thumbnails as needed

@@ -1,6 +1,7 @@
 // ============================================================
-// AVAILABLE COURSES — NEXT GEN UX (Somu Edition 🚀)
+// AVAILABLE COURSES — NEXT GEN UX
 // PRODUCTION READY — RENDER + FIREBASE HOSTING SUPPORT
+// VERSION 2025.8
 // ============================================================
 
 import { useState, useMemo, useCallback } from "react";

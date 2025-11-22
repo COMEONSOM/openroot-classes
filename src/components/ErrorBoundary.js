@@ -1,5 +1,5 @@
 // ============================================================
-// ERROR BOUNDARY COMPONENT — VERSION 1.1.4
+// ERROR BOUNDARY COMPONENT — VERSION 2025.8
 // ADVANCED ERROR HANDLING + FALLBACK UI + AUTO LOGGING
 // ============================================================
 

@@ -1,7 +1,7 @@
 /* ───────────────────────────────────────
    FILE PATH: src/styles/FreeContent.css
    Root Variables for Consistency
-   VERSION 1.1.4
+   VERSION 2025.8
 ─────────────────────────────────────── */
 
 :root {
@@ -62,8 +62,7 @@ body {
   position: relative;
   overflow: hidden;
 }
-.free-content-container h2 {
-  font-size: 2.2rem;                  /* Big enough for section title */
+.free-content-container h2 {             
   font-weight: 800;                 /* Bold and clear */
   text-align: center;               /* Centered */
   color: #7c3aed;   
@@ -184,5 +183,24 @@ body {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ───────────────────────────────────────────────
+   RESPONSIVE
+─────────────────────────────────────────────── */
+@media (max-width: 640px) {
+    .free-content-container h2 {
+        font-size: 1.5rem;
+    }
+}
+@media (min-width: 641px) and (max-width: 1024px) {
+    .free-content-container h2 {
+        font-size: 1.7rem;
+    }
+}
+@media (min-width: 1025px) {
+    .free-content-container h2 {
+        font-size:1.9rem;
     }
 }
