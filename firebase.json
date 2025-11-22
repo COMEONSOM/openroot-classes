@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "openroot-classes",
+    "site": "openroot-classes-firebase",
     "public": "build",
     "ignore": [
       "firebase.json",
