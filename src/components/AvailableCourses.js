@@ -1,9 +1,9 @@
 // ============================================================
 // AVAILABLE COURSES — NEXT GEN UX (Somu Edition 🚀)
-// ASYNC + STEP FLOW + PREMIUM UI + RAZORPAY READY
+// PRODUCTION READY — RENDER + FIREBASE HOSTING SUPPORT
 // ============================================================
 
-import { useState, useMemo, useCallback, useEffect } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -14,6 +14,13 @@ import FinanceLottie from "../assets/lotties/finance-course.json";
 import PromptLottie from "../assets/lotties/prompt_course.json";
 import FinanceQR from "../assets/FinanceQR.png";
 import PromptQR from "../assets/PromptQR.png";
+
+// ✅ BACKEND URL (LOCAL + PRODUCTION SAFE)
+const API_URL = process.env.REACT_APP_API_URL || "https://openroot-classes.onrender.com";
+
+// ============================================================
+// COURSE DATA
+// ============================================================
 
 const COURSE_DATA = Object.freeze([
   {
@@ -52,11 +59,19 @@ const COURSE_DATA = Object.freeze([
   },
 ]);
 
+// ============================================================
+// FAST LOOKUP MAP (DSA OPTIMIZATION — O(1))
+// ============================================================
+
 const useCourseLookup = () => {
   const map = useMemo(() => new Map(COURSE_DATA.map((c) => [c.id, c])), []);
   const getCourseById = useCallback((id) => map.get(id) ?? null, [map]);
   return { getCourseById };
 };
+
+// ============================================================
+// MAIN COMPONENT
+// ============================================================
 
 const AvailableCourses = () => {
   const [viewState, setViewState] = useState("list");
@@ -66,13 +81,24 @@ const AvailableCourses = () => {
   const { width, height } = useWindowSize();
   const { getCourseById } = useCourseLookup();
 
+  // ============================================================
+  // COURSE CLICK HANDLER
+  // ============================================================
+
   const handleCourseClick = useCallback(async (id) => {
     const course = await Promise.resolve(getCourseById(id));
     if (!course) return alert("Course not found");
+
     setSelectedCourse(course);
     setViewState("details");
+
+    // ✅ HAPTIC FEEDBACK (MOBILE)
     navigator.vibrate?.(30);
   }, [getCourseById]);
+
+  // ============================================================
+  // BACK HANDLER
+  // ============================================================
 
   const handleBack = useCallback(() => {
     if (viewState === "qr") return setViewState("details");
@@ -82,14 +108,20 @@ const AvailableCourses = () => {
     }
   }, [viewState]);
 
+  // ============================================================
+  // PAYMENT HANDLER — RENDER COMPATIBLE ✅
+  // ============================================================
+
   const handlePayClick = useCallback(async () => {
     try {
       if (!selectedCourse) return;
       setIsPaying(true);
 
+      // ✅ CLEAN PRICE EXTRACTION
       const amount = Number(selectedCourse.price.replace(/\D/g, ""));
 
-      const response = await fetch("http://localhost:5000/create-order", {
+      // ✅ CREATE ORDER (PRODUCTION URL)
+      const response = await fetch(`${API_URL}/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
@@ -106,14 +138,16 @@ const AvailableCourses = () => {
         description: selectedCourse.name,
         order_id: order.id,
 
+        // ✅ VERIFY PAYMENT WITH BACKEND
         handler: async (response) => {
-          const verify = await fetch("http://localhost:5000/verify-payment", {
+          const verify = await fetch(`${API_URL}/verify-payment`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(response),
           });
 
           const result = await verify.json();
+
           if (result.status === "success") {
             setShowConfetti(true);
             setViewState("qr");
@@ -121,6 +155,7 @@ const AvailableCourses = () => {
           } else {
             alert("Payment failed");
           }
+
           setIsPaying(false);
         },
 
@@ -130,7 +165,7 @@ const AvailableCourses = () => {
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err) {
-      console.error(err);
+      console.error("❌ PAYMENT INIT ERROR:", err);
       alert("Payment init failed");
       setIsPaying(false);
     }
@@ -177,7 +212,6 @@ const AvailableCourses = () => {
             exit={{ opacity: 0 }}
           >
             <button className="back-button" onClick={handleBack}>← Back</button>
-
             <h3>{selectedCourse.name}</h3>
             <p className="duration">{selectedCourse.duration}</p>
 
@@ -225,14 +259,10 @@ const AvailableCourses = () => {
             exit={{ opacity: 0 }}
           >
             <button className="back-button" onClick={handleBack}>← Back</button>
-
             <h3>🎉 Payment Successful!</h3>
             <p>You unlocked <strong>{selectedCourse.name}</strong></p>
-
             <img src={selectedCourse.qr} alt="QR" className="qr-code" />
-
             <p className="motivator">You’re investing in yourself 🚀</p>
-
             {showConfetti && <Confetti width={width} height={height} />}
           </motion.section>
         )}
