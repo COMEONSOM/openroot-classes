@@ -1,13 +1,14 @@
 {
-  "name": "server",
+  "name": "openroot-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Openroot Payment Backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Somu",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^2.2.0",
