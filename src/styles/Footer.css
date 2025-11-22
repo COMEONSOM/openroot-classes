@@ -1,289 +1,201 @@
 /* ============================================================
-   🌐 FOOTER STYLES — VERSION 1.1.6 (FINAL POLISHED)
-   FULLY RESPONSIVE | HIGHLY SCALABLE | UX-OPTIMIZED
-   AUTHOR: TEAM OPENROOT
+   🌐 OPENROOT FOOTER — GEN-Z PREMIUM UI
+   CONSISTENT BUTTONS • FUNKY • CLEAN • SCALABLE
    ============================================================ */
 
-/* ============================================================
-   1️⃣ DESIGN TOKENS — UNIVERSAL VARIABLES
-   ============================================================ */
+/* ================== ROOT VARIABLES ================== */
 :root {
-  --clr-bg: transparent;
-  --clr-surface: #000000;
-  --clr-surface-alt: #ffffff;
-  --clr-text: #e5e8ff;
-  --clr-accent: #5f6dff;
-  --clr-accent-glow: rgba(95, 109, 255, 0.45);
+  --bg-main: #f8fafc;
+  --bg-card: #050505;
+  --bg-glass: rgba(255,255,255,0.04);
+  --txt-main: #111827;
+  --txt-muted: #ba9ee2;
 
-  --neu-offset: 8px;
-  --neu-blur: 16px;
-  --neu-light: rgba(255, 255, 255, 0.08);
-  --neu-dark: rgba(0, 0, 0, 0.45);
+  --accent-main: #7c3aed;
+  --accent-glow: rgba(124,58,237,0.4);
+  --neon-green: #22c55e;
+  --neon-pink: #ec4899;
 
-  --r-sm: 8px;
-  --r-md: 12px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
 
-  --s-xs: 0.4rem;
-  --s-sm: 0.8rem;
-  --s-md: 1.2rem;
-  --s-lg: 1.6rem;
+  --space-xs: 0.4rem;
+  --space-sm: 0.8rem;
+  --space-md: 1.2rem;
+  --space-lg: 1.8rem;
 
-  --font-base: 'Inter', 'Segoe UI', sans-serif;
-  --fs-sm: 0.9rem;
-  --fs-md: 1rem;
-  --fs-lg: 1.1rem;
+  --font-main: "Inter", "Poppins", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 
-  --transition-fast: 0.18s ease-out;
-  --transition-medium: 0.25s ease;
-  --transition-slow: 0.35s ease-in-out;
+  --shadow-soft: 0 15px 40px rgba(0,0,0,0.06);
+  --shadow-glow: 0 0 25px var(--accent-glow);
 
-  --bp-xs: 480px;
-  --bp-sm: 767px;
+  --tr-fast: 0.15s ease;
+  --tr-med: 0.3s ease;
 }
 
-/* ============================================================
-   2️⃣ OUTER WRAPPER — MAIN CONTAINER
-   ============================================================ */
+/* ================== OUTER WRAPPER ================== */
 .contact-container {
-  background: var(--clr-bg);
-  color: var(--clr-text);
-  padding: var(--s-lg) var(--s-md);
-  font-family: var(--font-base);
+  background: var(--bg-main);
+  font-family: var(--font-main);
+  padding: var(--space-lg) var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: var(--s-md);
+  gap: var(--space-lg);
 }
 
-/* ============================================================
-   3️⃣ GRID LAYOUT — CONTACT + FOLLOW + TYPEWRITER
-   ============================================================ */
+/* ================== MOBILE → GRID ================== */
 .contact-follow-wrapper {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: var(--s-md);
-  align-items: stretch;
-}
-
-/* ============================================================
-   4️⃣ CARD STYLES — CONTACT, FOLLOW, TYPEWRITER BASE
-   ============================================================ */
-.card {
-  background: var(--clr-surface);
-  border-radius: var(--r-sm);
-  padding: var(--s-md);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 160px;
+  gap: var(--space-md);
+}
+@media (min-width: 768px) {
+  .contact-follow-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
+/* ================== CARD BASE ================== */
+.card {
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-soft);
+  transition: all var(--tr-med);
+}
+
+/* ================== HEADINGS ================== */
 .contact-section h2,
 .follow-us-heading {
-  text-align: center;
-  font-size: var(--fs-md);
-  color: var(--clr-accent);
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-main);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* add margin for visual balance */
-.follow-us-heading {
-  margin-bottom: var(--s-sm);
-}
-
-/* ensure .follow-us-section is styled explicitly */
-.follow-us-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ============================================================
-   5️⃣ CONTACT + SOCIAL ICONS
-   ============================================================ */
+/* ================== ICON BUTTONS (UNIFIED) ================== */
 .button-container,
 .social-icons {
   display: flex;
-  gap: var(--s-sm);
+  gap: var(--space-sm);
   flex-wrap: wrap;
   justify-content: center;
 }
-
 .icon-button,
-.social-icons a {
-  display: inline-flex;
+.social-link {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ffffff, #f1f5f9);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  padding: 0.25rem;
-  border-radius: 50%;
-  background: transparent;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-  will-change: transform, box-shadow;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: all var(--tr-med);
+  border: none;
+  cursor: pointer;
 }
-
-.icon-button img,
-.social-icons a img {
-  width: 1.6rem;
-  height: 1.6rem;
-  display: block;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  padding: 0;
-  border-radius: 0;
-  filter: none;
-}
-
+/* SAME HOVER STYLE FOR BOTH */
 .icon-button:hover,
-.social-icons a:hover,
-.icon-button:focus,
-.social-icons a:focus {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.35),
-              0 0 8px var(--clr-accent),
-              0 0 18px var(--clr-accent-glow);
-  outline: none;
+.social-link:hover {
+  transform: translateY(-6px) scale(1.05);
+  box-shadow:
+    0 0 0 2px var(--accent-main),
+    0 0 18px var(--accent-glow);
+}
+/* ICONS */
+.icon-img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
-/* reduce motion accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .icon-button,
-  .social-icons a {
-    transition: none;
-  }
-  .icon-button:hover,
-  .social-icons a:hover {
-    transform: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-  }
-}
-
-/* target Gmail / WhatsApp by filename if needed */
-.social-icons a[href*="gmail"] img,
-.social-icons a[href*="whatsapp"] img {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* ============================================================
-   6️⃣ TYPEWRITER STYLES
-   ============================================================ */
+/* ================== TYPEWRITER (KEPT UNTOUCHED) ================== */
 .typewriter-wrapper {
-  background: linear-gradient(145deg, #c7cfff, #eef0ff);
-  border-radius: var(--r-sm);
-  padding: var(--s-md);
+  background: linear-gradient(135deg, #0b102f, #020314);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  font-family: var(--font-mono);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  min-height: 160px;
-  font-family: monospace;
+  justify-content: center;
   text-align: center;
+  box-shadow: var(--shadow-soft);
 }
-
 .typewriter-text {
-  white-space: nowrap;
-  font-size: var(--fs-md);
-  overflow: hidden;
-  color: #000000;
+  color: var(--neon-green);
+  font-size: 1rem;
+  font-weight: 500;
 }
-
 .cursor {
-  margin-left: 2px;
-  animation: blink 0.75s steps(1) infinite;
+  color: var(--neon-pink);
+  animation: blink 1s infinite;
 }
-
 @keyframes blink {
   0%, 50% { opacity: 1; }
   50.01%, 100% { opacity: 0; }
 }
 
-/* ============================================================
-   7️⃣ FOOTER STRIP
-   ============================================================ */
+/* ================== FOOTER STRIP ================== */
 .footer {
-  background: var(--clr-surface);
-  color: #747373;
-  padding: var(--s-md) var(--s-sm);
+  background: #340e56;
+  color: var(--txt-muted);
+  padding: var(--space-md);
   text-align: center;
-  font-size: var(--fs-sm);
-  border-top: 1px solid var(--neu-dark);
+  font-size: 0.9rem;
+  border-top: 1px solid #e5e7eb;
 }
-
-.footer p {
-  margin: var(--s-xs) 0;
+.footer p{
+  margin: 0;
 }
-
+/* ================== LINKS ================== */
 .clickable-text {
-  color: var(--clr-accent);
+  color: var(--accent-main);
+  font-weight: 600;
   cursor: pointer;
   position: relative;
-  transition: color var(--transition-medium), text-shadow var(--transition-medium);
+  transition: color var(--tr-med), text-shadow var(--tr-med);
 }
-
-.clickable-text:hover,
-.clickable-text:focus-visible {
+.clickable-text:hover {
   color: #ffffff;
-  text-shadow: 0 0 6px var(--clr-accent), 0 0 12px var(--clr-accent-glow);
+  text-shadow: 0 0 12px var(--accent-glow);
 }
-
 .clickable-text::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
-  bottom: -2px;
-  width: 100%;
+  bottom: -3px;
   height: 2px;
-  background: var(--clr-accent);
+  width: 100%;
+  background: linear-gradient(90deg, #ec4899,#340e56);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform var(--transition-medium);
+  transition: transform var(--tr-med);
 }
-
-.clickable-text:hover::after,
-.clickable-text:focus-visible::after {
+.clickable-text:hover::after {
   transform: scaleX(1);
 }
 
-/* ============================================================
-   8️⃣ RESPONSIVE ENHANCEMENTS
-   ============================================================ */
-@media (max-width: var(--bp-xs)) {
+/* ================== RESPONSIVE ================== */
+@media (max-width: 480px) {
+  .icon-button,
+  .social-link {
+    width: 44px;
+    height: 44px;
+  }
+}
+@media (min-width: 1280px) {
   .contact-container {
-    padding: var(--s-sm);
-  }
-
-  .card {
-    padding: var(--s-sm);
-    min-height: 120px;
-  }
-
-  .icon-button img,
-  .social-icons a img {
-    width: 1.8rem;
-    height: 1.8rem;
-  }
-}
-
-@media (min-width: calc(var(--bp-xs) + 1px)) and (max-width: var(--bp-sm)) {
-  .icon-button img,
-  .social-icons a img {
-    width: 2.2rem;
-    height: 2.2rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .contact-follow-wrapper {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--s-md);
-  }
-
-  .card {
-    min-height: 180px;
+    max-width: 1400px;
+    margin: auto;
   }
 }

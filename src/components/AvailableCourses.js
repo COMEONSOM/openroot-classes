@@ -14,8 +14,6 @@ import FinanceLottie from "../assets/lotties/finance-course.json";
 import PromptLottie from "../assets/lotties/prompt_course.json";
 import FinanceQR from "../assets/FinanceQR.png";
 import PromptQR from "../assets/PromptQR.png";
-
-// ✅ BACKEND URL (LOCAL + PRODUCTION SAFE)
 const API_URL = process.env.REACT_APP_API_URL || "https://openroot-classes.onrender.com";
 
 // ============================================================
@@ -138,29 +136,44 @@ const AvailableCourses = () => {
         description: selectedCourse.name,
         order_id: order.id,
 
-        // ✅ VERIFY PAYMENT WITH BACKEND
+        // ✅ SUCCESS HANDLER
         handler: async (response) => {
-          const verify = await fetch(`${API_URL}/verify-payment`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(response),
-          });
+          try {
+            const verify = await fetch(`${API_URL}/verify-payment`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(response),
+            });
 
-          const result = await verify.json();
+            const result = await verify.json();
 
-          if (result.status === "success") {
-            setShowConfetti(true);
-            setViewState("qr");
-            setTimeout(() => setShowConfetti(false), 6000);
-          } else {
-            alert("Payment failed");
+            if (result.status === "success") {
+              setShowConfetti(true);
+              setViewState("qr");
+              setTimeout(() => setShowConfetti(false), 6000);
+            } else {
+              alert("Payment failed");
+            }
+          } catch (err) {
+            console.error("VERIFY ERROR:", err);
+            alert("Payment verification failed");
+          } finally {
+            // ✅ ALWAYS RESET BUTTON STATE
+            setIsPaying(false);
           }
+        },
 
-          setIsPaying(false);
+        // ✅ WHEN USER CLOSES RAZORPAY MANUALLY
+        modal: {
+          ondismiss: () => {
+            console.log("User closed Razorpay modal");
+            setIsPaying(false); // ✅ THIS FIXES YOUR ISSUE
+          },
         },
 
         theme: { color: "#7c3aed" },
       };
+
 
       const rzp = new window.Razorpay(options);
       rzp.open();

@@ -14,7 +14,7 @@ const FreeContent = () => {
 
   return (
     <div id="free-content" className="free-content-container">
-      <h2>Free Contents</h2>
+      <h2>💎 Free Contents</h2>
       <div className="video-list">
         {videos.map((video, index) => (
           <div key={index} className="video-item">

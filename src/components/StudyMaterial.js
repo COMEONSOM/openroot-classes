@@ -132,7 +132,7 @@ function StudyMaterial() {
 
   return (
     <section id="study-material" className="study-material">
-      <h2 className="study-title">Study Materials</h2>
+      <h2 className="study-title">📚 Study Materials</h2>
 
       {/* GRID */}
       <div

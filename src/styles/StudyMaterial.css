@@ -19,6 +19,8 @@
   --spacing-md: 12px;
   --spacing-lg: 20px;
   --spacing-xl: 32px;
+
+  --font: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 /* ───────────────────────────────────────────────
@@ -31,10 +33,11 @@
 }
 
 .study-title {
-  font-size: 2rem;
-  font-weight: bold;
+  font-family: var(--font);
+  font-size: 2.2rem;
+  font-weight: 800;
   margin-bottom: var(--spacing-xl);
-  color: #1d4ed8;
+  color: #7c3aed;
 }
 
 /* ───────────────────────────────────────────────
