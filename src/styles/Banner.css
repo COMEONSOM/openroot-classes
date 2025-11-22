@@ -99,34 +99,33 @@
 .arrow {
   position: absolute;
   top: 50%;
-  transform: scale(1.02);
-  background-color: var(--arrow-bg);
-  color: var(--text-color);
-  border: none;
-  width: var(--arrow-size);
-  height: var(--arrow-size);
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.5rem;
-  z-index: var(--z-arrows);
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color var(--hover-speed) ease, color var(--hover-speed) ease, transform var(--hover-speed) ease;
+  border: none;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: background  0.25s var( cubic-bezier(0.22, 1, 0.36, 1)),
+              transform  0.25s var( cubic-bezier(0.22, 1, 0.36, 1)),
+              opacity  0.25s var( cubic-bezier(0.22, 1, 0.36, 1)),
 }
-
-.arrow:hover {
-  background-color: var(--arrow-bg-hover);
-  color: var(--text-hover);
-  transform: scale(1.1);
-}
-
 .left-arrow {
-  left: var(--spacing-md);
+  left: 16px;
 }
-
 .right-arrow {
-  right: var(--spacing-md);
+  right: 16px;
+}
+/* HOVER STATE FOR POINTER DEVICES (DESKTOP/LAPTOP) */
+.arrow:hover {
+  background:  #7c3aed;
+  transform: translateY(-50%) scale(1.08);
 }
 
 /* ───────────────────────────────────────────────
@@ -134,29 +133,30 @@
 ────────────────────────────────────────────── */
 .dots-container {
   position: absolute;
-  bottom: var(--spacing-md);
   left: 50%;
+  bottom: 16px;
   transform: translateX(-50%);
   display: flex;
-  gap: var(--spacing-sm);
-  z-index: var(--z-dots);
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: 8;
 }
-
 .dot {
-  width: var(--dot-size);
-  height: var(--dot-size);
-  background-color: var(--dot-color);
-  border-radius: 50%;
+  width: 9px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
   cursor: pointer;
-  transition: background-color var(--hover-speed) ease, transform var(--hover-speed) ease;
+  background:  rgba(148, 163, 184, 0.7);
+  transition: all 0.25s var( cubic-bezier(0.22, 1, 0.36, 1));
 }
-
-.dot:hover {
-  transform: scale(1.2);
-}
-
 .dot.active {
-  background-color: var(--dot-active-color);
+  width: 26px;
+  background: #7c3aed;
+}
+.dot:hover {
+  transform: scale(1.15);
 }
 
 /* ───────────────────────────────────────────────

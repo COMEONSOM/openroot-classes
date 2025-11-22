@@ -15,7 +15,7 @@ function Header() {
          ====================================================== */}
       <div className="company-info">
         <img src={logo} alt="Company Logo" className="company-logo" />
-        <span className="brand-tag">#classes</span>
+        <span id="classes" className="brand-tag">#classes</span>
       </div>
     </header>
   );
