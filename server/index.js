@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config(); // ✅ LOAD ENV
+// SERVER ON RENDER
 
 const app = express();
 app.use(cors());
