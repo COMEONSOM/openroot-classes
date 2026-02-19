@@ -1,364 +1,292 @@
 // ============================================================
-// OPENROOT BANNER 🚀
-// - ES2023+ FEATURES + ASYNC/AWAIT
-// - DSA-STYLE HELPERS (O(1) NAVIGATION)
-// - EDGE-CASE SAFE + ACCESSIBLE
-// VERSION 2025.8
+// BANNER COMPONENT — PRODUCTION-READY -- VERSION 1.2.0
+// - 24:9 CINEMATIC CONTAINER + 16:9 SAFE CENTER FRAME
+// - NO CROPPING, NO STRETCHING OF ORIGINAL BANNERS
+// - DECORATIVE BACKGROUND LAYER
+// - ES2023+ FEATURES
+// - ACCESSIBILITY + KEYBOARD SUPPORT
+// - OPTIMIZED TIMERS + REDUCED-MOTION SUPPORT
 // ============================================================
 
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useMemo,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import banner1 from "../assets/banner1.avif";
-import banner2 from "../assets/banner2.avif";
-import banner3 from "../assets/banner3.avif";
+import banner1 from "../assets/banner_openroot_classes_1.avif";
+import banner2 from "../assets/banner_openroot_classes_2.avif";
+import banner3 from "../assets/banner_openroot_classes_3.avif";
+import banner4 from "../assets/banner_openroot_classes_4.avif";
 import "../styles/Banner.css";
 
 // ============================================================
-// UTILITY: ASYNC SLEEP (O(1) TIME/SPACE)
-// USED TO DEFER OPERATIONS WITHOUT BLOCKING MAIN THREAD
+// UTILITY: SLEEP
 // ============================================================
-const sleep = (ms = 0) =>
-  new Promise((resolve) => {
-    // DEFENSIVE: ENSURE NON-NEGATIVE DELAY
-    const safeMs = Number.isFinite(ms) && ms > 0 ? ms : 0;
-    setTimeout(resolve, safeMs);
-  });
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ============================================================
-// UTILITY: INDEX CLAMPER FOR CIRCULAR BUFFER (O(1))
-// THIS IS BASICALLY MODULO WITH SAFETY FOR NEGATIVE INDEX
+// UTILITY: SAFE CLAMP INDEX
 // ============================================================
 const clampIndex = (index, length) => {
-  if (!Number.isInteger(length) || length <= 0) return 0;
+  if (!length || length <= 0) return 0;
   return ((index % length) + length) % length;
 };
 
 // ============================================================
-// DEFAULT BANNERS (FALLBACK DATA)
+// DEFAULT BANNERS
 // ============================================================
-const DEFAULT_BANNERS = Object.freeze([
+const DEFAULT_BANNERS = [
   { id: 1, image: banner1, alt: "Banner 1" },
   { id: 2, image: banner2, alt: "Banner 2" },
   { id: 3, image: banner3, alt: "Banner 3" },
-]);
+  { id: 4, image: banner4, alt: "Banner 4" },
+];
 
-// ============================================================
-// NORMALIZE INPUT BANNERS (O(n))
-// - ENSURES ARRAY SHAPE
-// - FILTERS OUT BAD ITEMS WITHOUT CRASHING UI
-// ============================================================
-const normalizeBanners = (inputBanners) => {
-  if (!Array.isArray(inputBanners) || inputBanners.length === 0) {
-    console.warn("BANNER: INVALID OR EMPTY BANNERS PROP, USING DEFAULT.");
-    return DEFAULT_BANNERS;
+export default function Banner({ banners = DEFAULT_BANNERS, autoRotateMs = 10000 }) {
+  if (!Array.isArray(banners)) {
+    throw new TypeError("BANNERS MUST BE AN ARRAY");
   }
-
-  const cleaned = inputBanners
-    .filter((b) => b && typeof b.image === "string")
-    .map((b, idx) => ({
-      id:
-        b.id ??
-        // FALLBACK ID IF MISSING
-        `banner-${idx}`,
-      image: b.image,
-      alt: b.alt ?? `Banner ${idx + 1}`,
-    }));
-
-  if (cleaned.length === 0) {
-    console.warn("BANNER: ALL PROVIDED BANNERS INVALID, USING DEFAULT.");
-    return DEFAULT_BANNERS;
-  }
-
-  return cleaned;
-};
-
-// ============================================================
-// MAIN COMPONENT
-// ============================================================
-export default function Banner({
-  banners: incomingBanners = DEFAULT_BANNERS,
-  autoRotateMs = 6000,
-}) {
-  // ==========================================================
-  // NORMALIZED BANNER DATA (MEMOIZED O(n) ONLY ON PROP CHANGE)
-  // ==========================================================
-  const banners = useMemo(
-    () => normalizeBanners(incomingBanners),
-    [incomingBanners]
-  );
 
   const slideCount = banners.length;
 
-  // ==========================================================
-  // EDGE CASE: NO SLIDES → RENDER PLACEHOLDER (O(1))
-// ==========================================================
   if (slideCount === 0) {
     return (
-      <section className="home-banner" aria-label="No Content Banner">
-        <div className="banner-slide">
-          <div
-            style={{
-              width: "100%",
-              padding: "40px 20px",
-              textAlign: "center",
-              fontWeight: 600,
-            }}
-          >
-            NO BANNERS AVAILABLE
-          </div>
-        </div>
+      <section className="home-banner placeholder" aria-live="polite">
+        <div className="banner-placeholder">NO BANNERS AVAILABLE</div>
       </section>
     );
   }
 
-  // ==========================================================
-  // STATE + REFS
-  // currentIndex: CURRENT VISIBLE SLIDE (O(1) UPDATE)
-  // isPaused:     AUTO-ROTATE PAUSED DUE TO HOVER/INTERACTION
-  // ==========================================================
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  // ============================================================
+  // INTERNAL STATE
+  // ============================================================
+  const [current, setCurrent] = useState(0);
+  const [anim, setAnim] = useState(true);
+  const [hovered, setHovered] = useState(false);
 
+  const userInteractedAt = useRef(0);
   const intervalRef = useRef(null);
-  const pointerStartXRef = useRef(null);
-  const prefersReducedMotionRef = useRef(false);
+  const restartTimeoutRef = useRef(null);
 
-  // ==========================================================
-  // EFFECT: DETECT REDUCED MOTION PREFERENCE ONCE (O(1))
-// ==========================================================
+  // ============================================================
+  // SWIPE STATE
+  // ============================================================
+  const pointerStartX = useRef(null);
+  const pointerLastX = useRef(null);
+  const SWIPE_THRESHOLD = 50;
+
+  // ============================================================
+  // REDUCED MOTION
+  // ============================================================
+  const prefersReducedMotion = useRef(false);
   useEffect(() => {
     try {
-      const mq = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-      prefersReducedMotionRef.current = mq?.matches ?? false;
+      prefersReducedMotion.current = window.matchMedia
+        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        : false;
     } catch {
-      prefersReducedMotionRef.current = false;
+      prefersReducedMotion.current = false;
     }
   }, []);
 
-  // ==========================================================
-  // CLEAR INTERVAL HELPER (O(1))
-// ==========================================================
-  const clearAutoRotate = useCallback(() => {
+  // ============================================================
+  // TIMER HELPERS
+  // ============================================================
+  const clearTimers = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+    if (restartTimeoutRef.current) {
+      clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
   }, []);
 
-  // ==========================================================
-  // START AUTO ROTATE (O(1))
-// - RESPECT REDUCED MOTION
-// - SKIP IF ONLY ONE SLIDE
-// - USE ASYNC/AWAIT + SLEEP FOR DEFERRED START
-// ==========================================================
   const startAutoRotate = useCallback(
-    async (delayMs = autoRotateMs) => {
-      clearAutoRotate();
-
-      // IF USER PREFERS REDUCED MOTION, DO NOT AUTO ROTATE
-      if (prefersReducedMotionRef.current) return;
-      if (!Number.isFinite(delayMs) || delayMs <= 0) return;
-      if (slideCount <= 1) return;
-
-      // ASYNC DEFERRAL ENSURES CONSISTENT STATE AFTER USER ACTION
-      await sleep(0);
+    (delay = autoRotateMs) => {
+      clearTimers();
+      if (prefersReducedMotion.current) return;
 
       intervalRef.current = setInterval(() => {
-        setCurrentIndex((prev) => clampIndex(prev + 1, slideCount));
-      }, delayMs);
+        setCurrent((c) => clampIndex(c + 1, slideCount));
+      }, delay);
     },
-    [autoRotateMs, clearAutoRotate, slideCount]
+    [autoRotateMs, clearTimers, slideCount]
   );
 
-  // ==========================================================
-  // EFFECT: CONTROL AUTO ROTATE BASED ON PAUSE FLAG (O(1))
-// ==========================================================
+  const pauseAfterInteraction = useCallback(() => {
+    clearTimers();
+    userInteractedAt.current = Date.now();
+    restartTimeoutRef.current = setTimeout(() => {
+      if (!hovered) startAutoRotate();
+    }, 30000);
+  }, [clearTimers, hovered, startAutoRotate]);
+
   useEffect(() => {
-    if (!isPaused) {
-      void startAutoRotate();
-    } else {
-      clearAutoRotate();
-    }
+    startAutoRotate();
+    return () => clearTimers();
+  }, [startAutoRotate, clearTimers]);
 
-    return () => {
-      clearAutoRotate();
-    };
-  }, [isPaused, startAutoRotate, clearAutoRotate]);
-
-  // ==========================================================
-  // NAVIGATION HELPERS (ALL O(1))
-// ==========================================================
-  const goToIndex = useCallback(
+  // ============================================================
+  // NAVIGATION
+  // ============================================================
+  const goTo = useCallback(
     (targetIndex) => {
-      // DEFENSIVE CHECKS TO AVOID NaN
-      const safeTarget = Number.isInteger(targetIndex) ? targetIndex : 0;
-      setCurrentIndex(clampIndex(safeTarget, slideCount));
+      const next = clampIndex(targetIndex, slideCount);
+      setCurrent(next);
     },
     [slideCount]
   );
 
-  const goNext = useCallback(() => {
-    goToIndex(currentIndex + 1);
-  }, [goToIndex, currentIndex]);
+  const goNext = useCallback(() => goTo(current + 1), [goTo, current]);
+  const goPrev = useCallback(() => goTo(current - 1), [goTo, current]);
 
-  const goPrev = useCallback(() => {
-    goToIndex(currentIndex - 1);
-  }, [goToIndex, currentIndex]);
-
-  // ==========================================================
-  // POINTER SWIPE HANDLERS (O(1) PER EVENT)
-// SLIDING WINDOW STYLE: ONLY TRACK START + END X
-// ==========================================================
-  const handlePointerDown = (e) => {
-    try {
-      pointerStartXRef.current = e.clientX ?? e.touches?.[0]?.clientX ?? null;
-    } catch {
-      pointerStartXRef.current = null;
-    }
+  const handleDotClick = (idx) => {
+    goTo(idx);
+    pauseAfterInteraction();
   };
 
-  const handlePointerUp = async (e) => {
-    if (pointerStartXRef.current == null) return;
+  // ============================================================
+  // POINTER HANDLERS
+  // ============================================================
+  const handlePointerDown = (e) => {
+    pointerStartX.current = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
+    pointerLastX.current = pointerStartX.current;
+    pauseAfterInteraction();
+  };
 
-    const endX = e.clientX ?? e.changedTouches?.[0]?.clientX ?? null;
-    if (endX == null) {
-      pointerStartXRef.current = null;
-      return;
-    }
+  const handlePointerMove = (e) => {
+    pointerLastX.current = e.clientX ?? e.touches?.[0]?.clientX ?? pointerLastX.current;
+  };
 
-    const delta = pointerStartXRef.current - endX;
+  const handlePointerUp = async () => {
+    const start = pointerStartX.current ?? 0;
+    const end = pointerLastX.current ?? start;
+    const delta = start - end;
 
-    // SWIPE THRESHOLD
-    if (Math.abs(delta) > 50) {
+    if (Math.abs(delta) > SWIPE_THRESHOLD) {
       if (delta > 0) goNext();
       else goPrev();
-      setIsPaused(true);
-      // SMALL DEFER, THEN RESUME AUTO ROTATE
-      await sleep(800);
-      setIsPaused(false);
     }
 
-    pointerStartXRef.current = null;
+    pointerStartX.current = null;
+    pointerLastX.current = null;
+    await sleep(0);
   };
 
-  // ==========================================================
-  // HOVER HANDLERS (O(1))
-// ==========================================================
-  const handleMouseEnter = () => {
-    setIsPaused(true);
+  // ============================================================
+  // HOVER
+  // ============================================================
+  const onMouseEnter = () => {
+    setHovered(true);
+    clearTimers();
   };
 
-  const handleMouseLeave = () => {
-    setIsPaused(false);
+  const onMouseLeave = () => {
+    setHovered(false);
+    const since = Date.now() - (userInteractedAt.current || 0);
+    if (since < 30000) {
+      const remaining = Math.max(0, 30000 - since);
+      restartTimeoutRef.current = setTimeout(() => startAutoRotate(), remaining);
+    } else {
+      startAutoRotate();
+    }
   };
 
-  // ==========================================================
-  // KEYBOARD NAVIGATION (O(1))
-// ==========================================================
-  const handleKeyDown = (e) => {
+  // ============================================================
+  // KEYBOARD
+  // ============================================================
+  const onKeyDown = (e) => {
     if (e.key === "ArrowLeft") {
-      e.preventDefault();
       goPrev();
-      setIsPaused(true);
+      pauseAfterInteraction();
     } else if (e.key === "ArrowRight") {
-      e.preventDefault();
       goNext();
-      setIsPaused(true);
+      pauseAfterInteraction();
     }
   };
 
-  // ==========================================================
+  useEffect(() => {
+    setAnim(true);
+  }, [current]);
+
+  const translate = `translateX(-${current * 100}%)`;
+  const transitionStyle = anim && !prefersReducedMotion.current ? "transform 0.5s ease-in-out" : "none";
+
+  // ============================================================
   // RENDER
-  // ==========================================================
+  // ============================================================
   return (
     <section
       className="home-banner"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onKeyDown={handleKeyDown}
-      tabIndex={0} // MAKES BANNER FOCUSABLE FOR KEYBOARD USERS
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onKeyDown={onKeyDown}
+      tabIndex={0}
       role="region"
       aria-roledescription="carousel"
-      aria-label="Homepage Banner"
+      aria-label="Homepage banners"
     >
-      {/* SLIDES WRAPPER — TRANSLATEX FOR NETFLIX-STYLE SLIDE */}
-      <div
-        className="banner-container"
-        style={{
-          transform: `translateX(-${currentIndex * 100}%)`,
-          transition: "transform 0.6s ease-in-out",
-        }}
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
-        onTouchStart={handlePointerDown}
-        onTouchEnd={handlePointerUp}
-      >
-        {banners.map(({ id, image, alt }, idx) => (
-          <div
-            key={id ?? idx}
-            className="banner-slide"
-            aria-hidden={currentIndex !== idx}
-          >
-            <img
-              src={image}
-              alt={alt}
-              className="banner-image"
-              draggable={false}
-            />
-          </div>
-        ))}
+      {/* DECORATIVE BACKGROUND LAYER */}
+      <div className="hero-bg" aria-hidden="true" />
+
+      {/* CENTER 16:9 SAFE FRAME */}
+      <div className="hero-center-frame">
+        <div
+          className="banner-container"
+          style={{ transform: translate, transition: transitionStyle }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          onTouchStart={handlePointerDown}
+          onTouchMove={handlePointerMove}
+          onTouchEnd={handlePointerUp}
+          aria-live="polite"
+        >
+          {banners.map(({ id, image, alt }, idx) => (
+            <div key={`${id}-${idx}`} className="banner-slide" aria-hidden={current !== idx}>
+              <img
+                src={image}
+                alt={alt ?? `Banner ${idx + 1}`}
+                className="banner-image"
+                draggable={false}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ARROW CONTROLS */}
+      {/* NAVIGATION ARROWS */}
       <button
-        type="button"
         className="arrow left-arrow"
         aria-label="Previous banner"
         onClick={() => {
           goPrev();
-          setIsPaused(true);
+          pauseAfterInteraction();
         }}
       >
         ‹
       </button>
 
       <button
-        type="button"
         className="arrow right-arrow"
         aria-label="Next banner"
         onClick={() => {
           goNext();
-          setIsPaused(true);
+          pauseAfterInteraction();
         }}
       >
         ›
       </button>
 
-      {/* DOTS (PAGINATION) */}
-      <div
-        className="dots-container"
-        role="tablist"
-        aria-label="Banner Pagination"
-      >
+      {/* DOTS */}
+      <div className="dots-container" role="tablist" aria-label="Banner pagination">
         {banners.map((_, idx) => (
           <button
             key={idx}
-            type="button"
             role="tab"
-            aria-selected={currentIndex === idx}
-            className={`dot ${currentIndex === idx ? "active" : ""}`}
-            onClick={async () => {
-              goToIndex(idx);
-              setIsPaused(true);
-              await sleep(800);
-              setIsPaused(false);
-            }}
+            aria-selected={current === idx}
+            className={`dot ${current === idx ? "active" : ""}`}
+            onClick={() => handleDotClick(idx)}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
@@ -371,25 +299,12 @@ export default function Banner({
 // PROP TYPES
 // ============================================================
 Banner.propTypes = {
-  // ARRAY OF BANNERS (OPTIONAL)
   banners: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       image: PropTypes.string.isRequired,
       alt: PropTypes.string,
     })
   ),
-  // AUTO ROTATE INTERVAL IN MS (OPTIONAL)
   autoRotateMs: PropTypes.number,
 };
-
-// ============================================================
-// COMPLEXITY NOTES (HIGH LEVEL)
-// ------------------------------------------------------------
-// - NORMALIZEBANNERS: O(n) TIME, O(n) SPACE (n = SLIDE COUNT)
-// - RENDER MAPPING:    O(n) TIME PER RENDER
-// - NAVIGATION OPS:    O(1) TIME (USING CLAMPINDEX AS CIRCULAR BUFFER)
-// - AUTO-ROTATE TICK:  O(1) STATE UPDATE + RECONCILE
-// - MEMORY:            O(n) TO HOLD BANNERS ARRAY
-// THIS IS EFFECTIVELY A CIRCULAR QUEUE / RING BUFFER OVER SLIDES.
-// ============================================================

@@ -1,7 +1,7 @@
 // ============================================================
 // AVAILABLE COURSES — NEXT GEN UX
 // PRODUCTION READY — RENDER + FIREBASE HOSTING SUPPORT
-// VERSION 2025.8
+// VERSION 2026.2 (PRICING LOGIC FIXED - NO DOUBLE PAISE BUG)
 // ============================================================
 
 import { useState, useMemo, useCallback } from "react";
@@ -15,10 +15,11 @@ import FinanceLottie from "../assets/lotties/finance-course.json";
 import PromptLottie from "../assets/lotties/prompt_course.json";
 import FinanceQR from "../assets/FinanceQR.png";
 import PromptQR from "../assets/PromptQR.png";
+
 const API_URL = process.env.REACT_APP_API_URL || "https://openroot-classes.onrender.com";
 
 // ============================================================
-// COURSE DATA
+// COURSE DATA (NUMERIC PRICING = SAFE PAYMENTS)
 // ============================================================
 
 const COURSE_DATA = Object.freeze([
@@ -28,16 +29,18 @@ const COURSE_DATA = Object.freeze([
     animation: FinanceLottie,
     qr: FinanceQR,
     description: [
-      "Stock Market From Scratch",
-      "Mutual Funds",
-      "Gold Investments",
-      "Lending Systems",
-      "Smart Fixed Deposits",
-      "Portfolio Building",
-      "AI Systems in Finance",
+      "Stock Market From Zero (Demat, Buy/Sell, Basics, Fundamentals)",
+      "How to Research Companies & Analyze Stocks",
+      "Mutual Funds, Gold & Smart Fixed Deposit Strategies",
+      "Lending Systems & Risk Management Basics",
+      "Portfolio Building & Long-Term Wealth Planning",
+      "AI Tools in Finance for Smarter Decisions",
+      "Real-World Investing Mindset & Practical Frameworks",
     ],
     duration: "4 Months • 16 Classes",
-    price: "1769 INR",
+    totalFee: 1592,
+    monthlyFee: 398,
+    priceLabel: "Total Fee: ₹1592 • Pay ₹398/Month",
   },
   {
     id: 2,
@@ -45,21 +48,24 @@ const COURSE_DATA = Object.freeze([
     animation: PromptLottie,
     qr: PromptQR,
     description: [
-      "AI Image Generation",
-      "Text to Video",
-      "Logo Design",
-      "Branding",
-      "Blog Creation",
-      "AI Website Builder",
-      "Resume Builder",
+      "Beginner-Friendly: Zero to Hero Prompting (No Jargon, No Confusion)",
+      "AI Image, Text & Video Generation (Real-World Workflows)",
+      "Full YouTube Content Creation (Basic to Advanced)",
+      "Business Skills: PowerPoint, Professional Email, Resume etc.",
+      "Digital CV Building (No Coding Required at Start, Javascript & Tailwind based)",
+      "Website Building: HTML to React Journey (Step-by-Step)",
+      "Plus: Many Advanced & Hidden Skills Taught Inside the Course",
+      "Extra: Financial Literacy - On Demand",
     ],
     duration: "2 Months • 8 Classes",
-    price: "1249 INR",
+    totalFee: 598,
+    monthlyFee: 299,
+    priceLabel: "Total Fee: ₹598 • Pay ₹299/Month",
   },
 ]);
 
 // ============================================================
-// FAST LOOKUP MAP (DSA OPTIMIZATION — O(1))
+// FAST LOOKUP MAP (O(1))
 // ============================================================
 
 const useCourseLookup = () => {
@@ -108,22 +114,22 @@ const AvailableCourses = () => {
   }, [viewState]);
 
   // ============================================================
-  // PAYMENT HANDLER — RENDER COMPATIBLE ✅
-  // ============================================================
+  // PAYMENT HANDLER — FIXED (SEND RUPEES, BACKEND CONVERTS TO PAISE)
+// ============================================================
 
   const handlePayClick = useCallback(async () => {
     try {
       if (!selectedCourse) return;
       setIsPaying(true);
 
-      // ✅ CLEAN PRICE EXTRACTION
-      const amount = Number(selectedCourse.price.replace(/\D/g, ""));
+      // ✅ SEND AMOUNT IN RUPEES (BACKEND WILL *100)
+      const amountInRupees = selectedCourse.monthlyFee;
 
-      // ✅ CREATE ORDER (PRODUCTION URL)
+      // ✅ CREATE ORDER
       const response = await fetch(`${API_URL}/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount }),
+        body: JSON.stringify({ amount: amountInRupees }),
       });
 
       const order = await response.json();
@@ -159,22 +165,20 @@ const AvailableCourses = () => {
             console.error("VERIFY ERROR:", err);
             alert("Payment verification failed");
           } finally {
-            // ✅ ALWAYS RESET BUTTON STATE
             setIsPaying(false);
           }
         },
 
-        // ✅ WHEN USER CLOSES RAZORPAY MANUALLY
+        // ✅ WHEN USER CLOSES RAZORPAY
         modal: {
           ondismiss: () => {
             console.log("User closed Razorpay modal");
-            setIsPaying(false); // ✅ THIS FIXES YOUR ISSUE
+            setIsPaying(false);
           },
         },
 
         theme: { color: "#7c3aed" },
       };
-
 
       const rzp = new window.Razorpay(options);
       rzp.open();
@@ -199,7 +203,7 @@ const AvailableCourses = () => {
       {/* ===== LIST VIEW ===== */}
       {viewState === "list" && (
         <ul className="course-list">
-          {COURSE_DATA.map(({ id, name, animation, duration, price }) => (
+          {COURSE_DATA.map(({ id, name, animation, duration, priceLabel }) => (
             <motion.li
               key={id}
               className="course-item premium-card"
@@ -210,7 +214,7 @@ const AvailableCourses = () => {
               <Lottie animationData={animation} loop className="course-thumbnail" />
               <h4>{name}</h4>
               <p>{duration}</p>
-              <span className="price-chip">💰 {price}</span>
+              <span className="price-chip">💰 {priceLabel}</span>
             </motion.li>
           ))}
         </ul>
@@ -244,7 +248,7 @@ const AvailableCourses = () => {
             </div>
 
             <div className="price-and-pay">
-              <button className="price">💰 {selectedCourse.price}</button>
+              <button className="price">💰 {selectedCourse.priceLabel}</button>
 
               <motion.button
                 className="pay-button glowing"

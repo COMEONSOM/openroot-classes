@@ -169,7 +169,7 @@ const Footer = () => {
             Terms of Service
           </motion.span>
         </p>
-        <p>© {new Date().getFullYear()} OPENROOT. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Openroot Systems. All rights reserved.</p>
       </footer>
     </>
   );
