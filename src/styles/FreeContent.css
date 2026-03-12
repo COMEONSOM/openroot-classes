@@ -1,206 +1,288 @@
 /* ───────────────────────────────────────
    FILE PATH: src/styles/FreeContent.css
-   Root Variables for Consistency
-   VERSION 2025.8
+   VERSION 2025.10 (Updated for Scroll + Expand)
 ─────────────────────────────────────── */
 
 :root {
-    /* Color Palette */
-    --color-bg-body: #f8fafc;
-    --color-bg-container: #e1e1e1;
-    --color-bg-card: #ffffff;
-    --color-text: #000000;
-    --color-heading: #333333;
-    --color-overlay: rgba(0, 0, 0, 0.3);
-    --color-button: rgba(255, 255, 255, 0.8);
-    --color-button-hover: #ffffff;
-    --color-shadow-light: rgba(0, 0, 0, 0.1);
-    --color-shadow-medium: rgba(0, 0, 0, 0.15);
-    --color-shadow-heavy: rgba(0, 0, 0, 0.2);
-    /* Spacing */
-    --space-lg: 40px;
-    --space-md: 32px;
-    --space-sm: 16px;
-    --space-xs: 10px;
-    /* Border Radius */
-    --radius-md: 10px;
-    --radius-sm: 5px;
-    --radius-lg: 20px;
-    /* Font */
-    --font-main: "Segoe UI", system-ui, -apple-system, sans-serif;
-    /* Animation */
-    --transition-fast: 0.2s ease;
-    --transition-medium: 0.3s ease-in-out;
+  /* Color Palette */
+  --color-bg-body: #f8fafc;
+  --color-bg-container: #e1e1e1;
+  --color-bg-card: #ffffff;
+  --color-text: #000000;
+  --color-heading: #333333;
+  --color-overlay: rgba(0, 0, 0, 0.35);
+  --color-button: rgba(255, 255, 255, 0.9);
+  --color-button-hover: #ffffff;
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-shadow-medium: rgba(0, 0, 0, 0.15);
+  --color-shadow-heavy: rgba(0, 0, 0, 0.25);
+
+  /* Spacing */
+  --space-lg: 40px;
+  --space-md: 32px;
+  --space-sm: 16px;
+  --space-xs: 10px;
+
+  /* Radius */
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 20px;
+
+  /* Font */
+  --font-main: "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* Animation */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.3s ease-in-out;
 }
 
 /* ───────────────────────────────────────
-   Global Reset & Base Styles
+   Base
 ─────────────────────────────────────── */
+
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
+
 body {
-    font-family: var(--font-main);
-    margin: 0;
-    padding: 0;
-    background: var(--color-bg-body);
-    color: var(--color-text);
+  font-family: var(--font-main);
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-body);
+  color: var(--color-text);
 }
 
 /* ───────────────────────────────────────
-   Free Content Container
+   Container
 ─────────────────────────────────────── */
+
 .free-content-container {
   margin: var(--space-md);
   padding: var(--space-md);
   border-radius: var(--radius-md);
   background-color: var(--color-bg-container);
-  display: flex;
-  flex-direction: column;
   position: relative;
   overflow: hidden;
 }
-.free-content-container h2 {             
-  font-weight: 800;                 /* Bold and clear */
-  text-align: center;               /* Centered */
-  color: #7c3aed;   
-  margin-top: 2px;                /* Neutral dark gray */
-  margin-bottom: 2rem;              /* Space below header */
-  position: relative;               /* For pseudo-element underline */
-  letter-spacing: 0.5px;            /* Slight spacing for clarity */
-  line-height: 1.3;                 /* Balanced height */
+
+.free-content-container h2 {
+  font-weight: 800;
+  text-align: center;
+  color: #7c3aed;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
 }
 
 /* ───────────────────────────────────────
-   Video
+   Horizontal Scroll Layout
 ─────────────────────────────────────── */
-.video-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: var(--space-sm);
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+
+.scroll-wrapper {
+  position: relative;
 }
-.video-item {
-    background-color: var(--color-bg-card);
-    border-radius: var(--radius-sm);
-    box-shadow: 0 2px 6px var(--color-shadow-light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    width: 100%;
-    animation: fadeIn 0.4s ease-out;
-    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+
+.video-scroll-container {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
 }
-.video-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--color-shadow-medium);
+
+.video-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Card */
+
+.video-card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px var(--color-shadow-light);
+  flex-shrink: 0;
+  width: 240px;
+  transition: transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.video-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px var(--color-shadow-medium);
+}
+
+/* Large screen: 5 visible */
+@media (min-width: 1025px) {
+  .video-card {
+    width: calc((100% - 4 * var(--space-sm)) / 5);
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .video-card {
+    width: 45%;
+  }
+}
+
+/* Mobile: 1 visible */
+@media (max-width: 640px) {
+  .video-card {
+    width: 90%;
+  }
 }
 
 /* ───────────────────────────────────────
    Thumbnail
 ─────────────────────────────────────── */
+
 .thumbnail-container {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* 16:9 ratio */
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
 }
+
 .thumbnail-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-}
-/* ───────────────────────────────────────
-   Video Info
-─────────────────────────────────────── */
-.video-info {
-    width: 100%;
-    padding: var(--space-xs);
-    text-align: left;
-}
-.video-info h3 {
-    font-size: 1rem;
-    color: var(--color-heading);
-    margin: 0 0 5px 0;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
 }
 
-/* ───────────────────────────────────────
-   Overlay & Play Button
-─────────────────────────────────────── */
+/* Overlay */
+
 .video-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--color-overlay);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity var(--transition-medium);
+  position: absolute;
+  inset: 0;
+  background: var(--color-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity var(--transition-medium);
 }
-.video-item:hover .video-overlay {
-    opacity: 1;
+
+.video-card:hover .video-overlay {
+  opacity: 1;
 }
+
 .video-play-button {
-    width: 50px;
-    height: 50px;
-    background: var(--color-button);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 10px var(--color-shadow-heavy);
-    transition: background var(--transition-medium);
-    cursor: pointer;
+  width: 50px;
+  height: 50px;
+  background: var(--color-button);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px var(--color-shadow-heavy);
+  transition: background var(--transition-medium);
 }
-.video-play-button:hover {
-    background: var(--color-button-hover);
-}
+
 .video-play-button::before {
-    content: '▶';
-    font-size: 20px;
-    color: var(--color-heading);
+  content: "▶";
+  font-size: 18px;
+  color: var(--color-heading);
+}
+
+.video-play-button:hover {
+  background: var(--color-button-hover);
+}
+
+/* Title */
+
+.video-card h3 {
+  padding: var(--space-xs);
+  font-size: 0.95rem;
+  color: var(--color-heading);
 }
 
 /* ───────────────────────────────────────
-   Animations
+   View All Card
 ─────────────────────────────────────── */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+
+.view-all-card {
+  width: 200px;
+  flex-shrink: 0;
+  background: #7c3aed;
+  color: white;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform var(--transition-fast);
 }
 
-/* ───────────────────────────────────────────────
-   RESPONSIVE
-─────────────────────────────────────────────── */
+.view-all-card:hover {
+  transform: scale(1.05);
+}
+
+/* ───────────────────────────────────────
+   Expanded View
+─────────────────────────────────────── */
+
+.expanded-view {
+  animation: fadeIn 0.3s ease;
+}
+
+.back-btn {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: 600;
+  transition: background var(--transition-fast);
+}
+
+.back-btn:hover {
+  background: #6d28d9;
+}
+
+.expanded-grid {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* Mobile Expanded: 2 per row */
 @media (max-width: 640px) {
-    .free-content-container h2 {
-        font-size: 1.5rem;
-    }
+  .expanded-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-@media (min-width: 641px) and (max-width: 1024px) {
-    .free-content-container h2 {
-        font-size: 1.7rem;
-    }
+
+/* ───────────────────────────────────────
+   Animation
+─────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-@media (min-width: 1025px) {
-    .free-content-container h2 {
-        font-size:1.9rem;
-    }
+/* ───────────────────────────────────────
+   FIX: Reset Card Width Inside Expanded View
+─────────────────────────────────────── */
+
+.expanded-grid .video-card {
+  width: 100% !important;   /* 🔥 Override scroll width */
+}
+@media (min-width: 1200px) {
+  .expanded-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
 }
