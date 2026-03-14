@@ -1,7 +1,7 @@
 // ============================================================
 // AVAILABLE COURSES — NEXT GEN UX
-// PRODUCTION READY — RENDER + FIREBASE HOSTING SUPPORT
-// VERSION 2026.2 (PRICING LOGIC FIXED - NO DOUBLE PAISE BUG)
+// CLEAN VERSION (QR REMOVED)
+// VERSION 2026.5
 // ============================================================
 
 import { useState, useMemo, useCallback } from "react";
@@ -13,13 +13,12 @@ import "../styles/AvailableCourses.css";
 
 import FinanceLottie from "../assets/lotties/finance-course.json";
 import PromptLottie from "../assets/lotties/prompt_course.json";
-import FinanceQR from "../assets/FinanceQR.png";
-import PromptQR from "../assets/PromptQR.png";
 
-const API_URL = process.env.REACT_APP_API_URL || "https://openroot-classes.onrender.com";
+const API_URL =
+  process.env.REACT_APP_API_URL || "https://openroot-classes.onrender.com";
 
 // ============================================================
-// COURSE DATA (NUMERIC PRICING = SAFE PAYMENTS)
+// COURSE DATA
 // ============================================================
 
 const COURSE_DATA = Object.freeze([
@@ -27,50 +26,62 @@ const COURSE_DATA = Object.freeze([
     id: 1,
     name: "Investing & Finance",
     animation: FinanceLottie,
-    qr: FinanceQR,
+
     description: [
       "Stock Market From Zero (Demat, Buy/Sell, Basics, Fundamentals)",
       "How to Research Companies & Analyze Stocks",
       "Mutual Funds, Gold & Smart Fixed Deposit Strategies",
-      "Lending Systems & Risk Management Basics",
       "Portfolio Building & Long-Term Wealth Planning",
       "AI Tools in Finance for Smarter Decisions",
       "Real-World Investing Mindset & Practical Frameworks",
     ],
-    duration: "4 Months • 16 Classes",
-    totalFee: 1592,
-    monthlyFee: 398,
-    priceLabel: "Total Fee: ₹1592 • Pay ₹398/Month",
+
+    duration: "1 Month • 8 Classes • 2 Classes / Week",
+    totalFee: 650,
+    priceLabel: "Total Fee: ₹650 • One-Time Payment",
   },
+
   {
     id: 2,
     name: "Prompt Engineering",
     animation: PromptLottie,
-    qr: PromptQR,
+
     description: [
-      "Beginner-Friendly: Zero to Hero Prompting (No Jargon, No Confusion)",
-      "AI Image, Text & Video Generation (Real-World Workflows)",
-      "Full YouTube Content Creation (Basic to Advanced)",
-      "Business Skills: PowerPoint, Professional Email, Resume etc.",
-      "Digital CV Building (No Coding Required at Start, Javascript & Tailwind based)",
-      "Website Building: HTML to React Journey (Step-by-Step)",
-      "Plus: Many Advanced & Hidden Skills Taught Inside the Course",
-      "Extra: Financial Literacy - On Demand",
+      "Prompt Engineering Basics — How to write clear prompts to control AI output",
+      "AI Image Generation using ChatGPT, Gemini, Grok and other tools",
+      "Image Editing with AI — background change, object removal, enhancement",
+      "Text → Image → Video workflow and AI video generation pipeline",
+      "Talking Characters and AI animated videos with audio integration",
+      "AI Music and Sound generation for videos and content",
+      "YouTube Content Creation — thumbnails, loop videos, animated shorts",
+      "Professional Work Skills — Email writing, PPT, Resume, and documents using AI",
+      "Building a Digital CV Website using HTML, CSS and JavaScript",
+      "Using VS Code and understanding project structure",
+      "GitHub basics — version control and publishing your code online",
+      "Deploying your website live using GitHub Pages",
+      "Introduction to React and modern web app structure",
+      "Understanding databases, LocalStorage, and cloud basics (Firebase overview)",
+      "Practical projects to build confidence with AI and web tools",
+      "Career guidance — freelancing, content creation, tech learning path"
     ],
-    duration: "2 Months • 8 Classes",
-    totalFee: 598,
-    monthlyFee: 299,
-    priceLabel: "Total Fee: ₹598 • Pay ₹299/Month",
+
+    duration: "1 Month • 8 Classes • 2 Classes / Week",
+    totalFee: 850,
+    priceLabel: "Total Fee: ₹850 • One-Time Payment",
   },
 ]);
 
 // ============================================================
-// FAST LOOKUP MAP (O(1))
+// FAST LOOKUP
 // ============================================================
 
 const useCourseLookup = () => {
   const map = useMemo(() => new Map(COURSE_DATA.map((c) => [c.id, c])), []);
-  const getCourseById = useCallback((id) => map.get(id) ?? null, [map]);
+
+  const getCourseById = useCallback((id) => {
+    return map.get(id) ?? null;
+  }, [map]);
+
   return { getCourseById };
 };
 
@@ -83,72 +94,85 @@ const AvailableCourses = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [isPaying, setIsPaying] = useState(false);
+
   const { width, height } = useWindowSize();
   const { getCourseById } = useCourseLookup();
 
-  // ============================================================
-  // COURSE CLICK HANDLER
-  // ============================================================
+  // COURSE CLICK
+  const handleCourseClick = useCallback(
+    async (id) => {
+      const course = await Promise.resolve(getCourseById(id));
 
-  const handleCourseClick = useCallback(async (id) => {
-    const course = await Promise.resolve(getCourseById(id));
-    if (!course) return alert("Course not found");
+      if (!course) {
+        alert("Course not found");
+        return;
+      }
 
-    setSelectedCourse(course);
-    setViewState("details");
+      setSelectedCourse(course);
+      setViewState("details");
+      navigator.vibrate?.(30);
+    },
+    [getCourseById]
+  );
 
-    // ✅ HAPTIC FEEDBACK (MOBILE)
-    navigator.vibrate?.(30);
-  }, [getCourseById]);
-
-  // ============================================================
-  // BACK HANDLER
-  // ============================================================
-
+  // BACK BUTTON
   const handleBack = useCallback(() => {
-    if (viewState === "qr") return setViewState("details");
+    if (viewState === "qr") {
+      setViewState("details");
+      return;
+    }
+
     if (viewState === "details") {
       setSelectedCourse(null);
-      return setViewState("list");
+      setViewState("list");
     }
   }, [viewState]);
 
-  // ============================================================
-  // PAYMENT HANDLER — FIXED (SEND RUPEES, BACKEND CONVERTS TO PAISE)
-// ============================================================
-
+  // PAYMENT
   const handlePayClick = useCallback(async () => {
     try {
       if (!selectedCourse) return;
+
       setIsPaying(true);
 
-      // ✅ SEND AMOUNT IN RUPEES (BACKEND WILL *100)
-      const amountInRupees = selectedCourse.monthlyFee;
+      const amountInRupees = selectedCourse.totalFee;
 
-      // ✅ CREATE ORDER
       const response = await fetch(`${API_URL}/create-order`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: amountInRupees }),
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          amount: amountInRupees,
+        }),
       });
 
       const order = await response.json();
+
       if (!order.id) throw new Error("Order failed");
 
       const options = {
         key: process.env.REACT_APP_RAZORPAY_KEY,
+
         amount: order.amount,
         currency: "INR",
+
         name: "Openroot Classes",
         description: selectedCourse.name,
+
         order_id: order.id,
 
-        // ✅ SUCCESS HANDLER
         handler: async (response) => {
           try {
             const verify = await fetch(`${API_URL}/verify-payment`, {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+
+              headers: {
+                "Content-Type": "application/json",
+              },
+
               body: JSON.stringify(response),
             });
 
@@ -156,8 +180,11 @@ const AvailableCourses = () => {
 
             if (result.status === "success") {
               setShowConfetti(true);
-              setViewState("qr");
-              setTimeout(() => setShowConfetti(false), 6000);
+              setViewState("success");
+
+              setTimeout(() => {
+                setShowConfetti(false);
+              }, 6000);
             } else {
               alert("Payment failed");
             }
@@ -169,22 +196,22 @@ const AvailableCourses = () => {
           }
         },
 
-        // ✅ WHEN USER CLOSES RAZORPAY
         modal: {
           ondismiss: () => {
-            console.log("User closed Razorpay modal");
             setIsPaying(false);
           },
         },
 
-        theme: { color: "#7c3aed" },
+        theme: {
+          color: "#7c3aed",
+        },
       };
 
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err) {
-      console.error("❌ PAYMENT INIT ERROR:", err);
-      alert("Payment init failed");
+      console.error("PAYMENT INIT ERROR:", err);
+      alert("Payment initialization failed");
       setIsPaying(false);
     }
   }, [selectedCourse]);
@@ -193,34 +220,49 @@ const AvailableCourses = () => {
     <div id="available-courses" className="courses-container">
       <h2>🚀 Available Courses</h2>
 
-      {/* ===== STEPPER UI ===== */}
       <div className="course-stepper">
-        <div className={viewState === "list" ? "step active" : "step"}>Explore</div>
-        <div className={viewState === "details" ? "step active" : "step"}>Overview</div>
-        <div className={viewState === "qr" ? "step active" : "step"}>Payment</div>
+        <div className={viewState === "list" ? "step active" : "step"}>
+          Explore
+        </div>
+
+        <div className={viewState === "details" ? "step active" : "step"}>
+          Overview
+        </div>
+
+        <div className={viewState === "success" ? "step active" : "step"}>
+          Payment
+        </div>
       </div>
 
-      {/* ===== LIST VIEW ===== */}
+      {/* LIST */}
       {viewState === "list" && (
         <ul className="course-list">
-          {COURSE_DATA.map(({ id, name, animation, duration, priceLabel }) => (
+          {COURSE_DATA.map((course) => (
             <motion.li
-              key={id}
+              key={course.id}
               className="course-item premium-card"
               whileHover={{ y: -6, scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => handleCourseClick(id)}
+              onClick={() => handleCourseClick(course.id)}
             >
-              <Lottie animationData={animation} loop className="course-thumbnail" />
-              <h4>{name}</h4>
-              <p>{duration}</p>
-              <span className="price-chip">💰 {priceLabel}</span>
+              <Lottie
+                animationData={course.animation}
+                loop
+                className="course-thumbnail"
+              />
+
+              <h4>{course.name}</h4>
+              <p>{course.duration}</p>
+
+              <span className="price-chip">
+                💰 {course.priceLabel}
+              </span>
             </motion.li>
           ))}
         </ul>
       )}
 
-      {/* ===== DETAILS VIEW ===== */}
+      {/* DETAILS */}
       <AnimatePresence>
         {viewState === "details" && selectedCourse && (
           <motion.section
@@ -229,8 +271,12 @@ const AvailableCourses = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
           >
-            <button className="back-button" onClick={handleBack}>← Back</button>
+            <button className="back-button" onClick={handleBack}>
+              ← Back
+            </button>
+
             <h3>{selectedCourse.name}</h3>
+
             <p className="duration">{selectedCourse.duration}</p>
 
             <div className="highlights-grid">
@@ -248,7 +294,9 @@ const AvailableCourses = () => {
             </div>
 
             <div className="price-and-pay">
-              <button className="price">💰 {selectedCourse.priceLabel}</button>
+              <button className="price">
+                💰 {selectedCourse.priceLabel}
+              </button>
 
               <motion.button
                 className="pay-button glowing"
@@ -267,21 +315,29 @@ const AvailableCourses = () => {
         )}
       </AnimatePresence>
 
-      {/* ===== QR / SUCCESS VIEW ===== */}
+      {/* SUCCESS */}
       <AnimatePresence>
-        {viewState === "qr" && selectedCourse && (
+        {viewState === "success" && selectedCourse && (
           <motion.section
             className="qr-section"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
           >
-            <button className="back-button" onClick={handleBack}>← Back</button>
             <h3>🎉 Payment Successful!</h3>
-            <p>You unlocked <strong>{selectedCourse.name}</strong></p>
-            <img src={selectedCourse.qr} alt="QR" className="qr-code" />
-            <p className="motivator">You’re investing in yourself 🚀</p>
-            {showConfetti && <Confetti width={width} height={height} />}
+
+            <p>
+              You successfully enrolled in{" "}
+              <strong>{selectedCourse.name}</strong>
+            </p>
+
+            <p className="motivator">
+              Welcome to Openroot 🚀
+            </p>
+
+            {showConfetti && (
+              <Confetti width={width} height={height} />
+            )}
           </motion.section>
         )}
       </AnimatePresence>
