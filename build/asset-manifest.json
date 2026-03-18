@@ -1,15 +1,13 @@
 {
   "files": {
     "main.css": "/static/css/main.17dc825e.css",
-    "main.js": "/static/js/main.da4c2fa1.js",
+    "main.js": "/static/js/main.dac8ec80.js",
     "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.2582b0e4bcf85eceead0.ttf",
     "static/media/banner_openroot_classes_3.avif": "/static/media/banner_openroot_classes_3.2f266f4d80110643d28a.avif",
     "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.1815e00441357e01619e.ttf",
     "static/media/banner_openroot_classes_4.avif": "/static/media/banner_openroot_classes_4.e4a4d1b1be86c5cfb276.avif",
     "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.2463b90d9a316e4e5294.woff2",
     "static/media/banner_openroot_classes_1.avif": "/static/media/banner_openroot_classes_1.bbb5b8b941aaf2a13e31.avif",
-    "static/media/FinanceQR.png": "/static/media/FinanceQR.9e45291b4d63085b11d0.png",
-    "static/media/PromptQR.png": "/static/media/PromptQR.f5b2397e6338cb742825.png",
     "static/media/e1.avif": "/static/media/e1.352bad13cf50557a31ca.avif",
     "static/media/e3.avif": "/static/media/e3.9068518944bf893a9913.avif",
     "static/media/fa-brands-400.woff2": "/static/media/fa-brands-400.c210719e60948b211a12.woff2",
@@ -30,10 +28,10 @@
     "static/media/youtube.svg": "/static/media/youtube.6806408aa1bf55b7f1aaba51978e649e.svg",
     "static/media/facebook.svg": "/static/media/facebook.5e1cb4b86ac3f872dadcbde3ed31cd4b.svg",
     "main.17dc825e.css.map": "/static/css/main.17dc825e.css.map",
-    "main.da4c2fa1.js.map": "/static/js/main.da4c2fa1.js.map"
+    "main.dac8ec80.js.map": "/static/js/main.dac8ec80.js.map"
   },
   "entrypoints": [
     "static/css/main.17dc825e.css",
-    "static/js/main.da4c2fa1.js"
+    "static/js/main.dac8ec80.js"
   ]
 }

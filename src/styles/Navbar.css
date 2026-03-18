@@ -1,26 +1,41 @@
 /* ============================================================
    NAVBAR STYLES -- VERSION 2025.8
    AUTHOR: TEAM OPENROOT
+   STYLE: LIQUID MORPHISM EDITION
    ============================================================ */
+
 
 /* ───────────────────────────────────────────────
    ROOT VARIABLES — SCALABLE & THEMEABLE
 ─────────────────────────────────────────────── */
 :root {
+  --navbar-height: 70px; /* adjust if needed */
   /* COLOR PALETTE */
-  --navbar-bg: #000000e7;           /* DARK SLATE BACKGROUND */
-  --navbar-text: #ffffff;         /* PRIMARY TEXT COLOR */
-  --navbar-hover: #61a0ff;        /* HOVER / INTERACTIVE HIGHLIGHT */
-  --navbar-active: #0047b3;       /* ACTIVE BUTTON STATE */
-  --navbar-focus: #87ceff;        /* FOCUS OUTLINE FOR ACCESSIBILITY */
+  --navbar-bg: rgba(10, 14, 26, 0.45);       /* LIQUID GLASS BASE — SEMI-TRANSPARENT */
+  --navbar-text: #e8f0ff;                    /* SOFT WHITE TEXT FOR GLASS DEPTH */
+  --navbar-hover: #ffffff;                   /* HOVER HIGHLIGHT — COOL BLUE */
+  --navbar-active: #ffffff;                  /* ACTIVE STATE */
+  --navbar-focus: #e7e7e7;                   /* FOCUS RING — ACCESSIBLE */
+
+  /* LIQUID GLASS LAYERS */
+  --glass-blur: blur(24px) saturate(200%);   /* FROSTED BLUR + COLOR DEPTH */
+  --glass-tint: rgba(0, 0, 0, 0.06);   /* SURFACE TINT OVERLAY */
+  --glass-border: rgba(255, 255, 255, 0.12); /* EDGE HIGHLIGHT (SPECULAR) */
+  --glass-specular: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.486) 0%,
+    rgba(0, 0, 0, 0.486) 100%,
+    transparent 70%
+  );                                          /* LIGHT CAST FROM TOP-LEFT */
+  --glass-sheen: rgba(255, 255, 255, 0.08);  /* INNER LIQUID TINT */
 
   /* TYPOGRAPHY */
   --font-family: 'Inter', 'Helvetica', sans-serif;
-  --font-size-xs: 0.75rem;        /* VERY SMALL SCREENS */
-  --font-size-sm: 0.85rem;        /* SMALL SCREENS */
-  --font-size-md: 1rem;           /* DEFAULT */
-  --font-size-lg: 1.1rem;         /* LARGE SCREENS */
-  --font-size-xl: 1.25rem;        /* EXTRA-LARGE SCREENS */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.85rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.25rem;
 
   /* SPACING */
   --spacing-xs: 4px;
@@ -31,33 +46,81 @@
   --spacing-xxl: 32px;
 
   /* BORDER RADIUS & SHADOWS */
-  --border-radius: 8px;
-  --shadow-sm: 0 2px 6px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 10px rgba(0,0,0,0.15);
-  --shadow-lg: 0 8px 20px rgba(0,0,0,0.2);
+  --border-radius: 10px;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 20px rgba(100, 160, 255, 0.12); /* AMBIENT LIQUID GLOW */
 
   /* TRANSITION TIMING */
   --transition-fast: 0.2s ease;
-  --transition-medium: 0.3s ease;
-  --transition-slow: 0.5s ease;
+  --transition-medium: 0.35s cubic-bezier(0.4, 0, 0.2, 1); /* FLUID EASING */
+  --transition-slow: 0.55s cubic-bezier(0.23, 1, 0.32, 1);  /* ELASTIC SETTLE */
 }
 
+
+html {
+  scroll-behavior: smooth; /* smooth but not laggy */
+  scroll-padding-top: var(--navbar-height);
+}
+
+/* APPLY TO ALL SECTIONS */
+section {
+  scroll-margin-top: var(--navbar-height);
+}
 /* ───────────────────────────────────────────────
-   NAVBAR CONTAINER
+   NAVBAR CONTAINER — LIQUID GLASS SURFACE
 ─────────────────────────────────────────────── */
 .navbar {
   width: 100%;
-  background-color: var(--navbar-bg);
+  background-color: #000000;
   padding: var(--spacing-md) var(--spacing-xl);
   display: flex;
   justify-content: center;
   align-items: center;
-  position: sticky;         /* ALWAYS VISIBLE */
+  position: sticky;
   top: 0;
   z-index: 999;
-  box-shadow: var(--shadow-md);
+  /* GLASS BORDER — SPECULAR EDGE */
+  border-bottom: 1px solid var(--glass-border);
+
   font-family: var(--font-family);
+
+  /* SMOOTH GLASS LAYER TRANSITIONS */
+  transition:
+    background-color var(--transition-medium),
+    box-shadow var(--transition-medium),
+    backdrop-filter var(--transition-slow);
 }
+
+/* SPECULAR LIGHT LAYER — SIMULATES LIGHT CAST ON GLASS */
+.navbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glass-specular);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* INNER LIQUID TINT LAYER */
+.navbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glass-tint);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* KEEP CHILDREN ABOVE PSEUDO LAYERS */
+.navbar > * {
+  position: relative;
+  z-index: 1;
+}
+
 
 /* ───────────────────────────────────────────────
    NAVIGATION BUTTONS CONTAINER
@@ -65,59 +128,118 @@
 .nav-buttons {
   display: flex;
   gap: var(--spacing-lg);
-  flex-wrap: wrap; /* WRAP ON SMALLER DEVICES */
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
 
+
 /* ───────────────────────────────────────────────
-   NAVIGATION BUTTONS
+   NAVIGATION BUTTONS — LIQUID GLASS STYLE
 ─────────────────────────────────────────────── */
 .nav-button {
   background: transparent;
   color: var(--navbar-text);
-  border: none;
+  border: 1px solid transparent;
   font-size: var(--font-size-md);
   padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--border-radius);
   cursor: pointer;
   position: relative;
   outline: none;
-  transition: color var(--transition-medium), transform var(--transition-fast);
+  overflow: hidden;                          /* CLIP LIQUID RIPPLE */
+  letter-spacing: 0.02em;
+  transition:
+    color var(--transition-medium),
+    border-color var(--transition-medium),
+    box-shadow var(--transition-medium),
+    transform var(--transition-fast),
+    background var(--transition-medium);
 }
 
 /* ACCESSIBILITY: FOCUS RING */
 .nav-button:focus-visible {
-  box-shadow: 0 0 0 3px var(--navbar-focus);
+  box-shadow:
+    0 0 0 3px var(--navbar-focus),
+    inset 0 0 10px rgba(140, 98, 239, 0.1);
 }
 
-/* UNDERLINE HOVER EFFECT */
+/* LIQUID FILL — HOVER GLASS CAPSULE */
+.nav-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(144, 100, 255, 0.08) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-medium);
+  border-radius: inherit;
+  z-index: 0;
+}
+
+/* UNDERLINE MORPHIC STROKE */
 .nav-button::after {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: 4px;
-  height: 2px;
-  width: 100%;
-  background: var(--navbar-hover);
+  left: 10%;
+  bottom: 5px;
+  height: 1.5px;
+  width: 80%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--navbar-hover),
+    transparent
+  );
   transform: scaleX(0);
-  transform-origin: bottom right;
+  transform-origin: center;
   transition: transform var(--transition-medium);
+  border-radius: 2px;
+  z-index: 1;
 }
 
-/* HOVER & ACTIVE STATES */
+/* BUTTON CONTENT ABOVE PSEUDO LAYERS */
+.nav-button > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* HOVER STATE — LIQUID GLASS CAPSULE ACTIVATES */
 .nav-button:hover {
   color: var(--navbar-hover);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--glass-border);
   transform: translateY(-2px);
+  box-shadow:
+    0 4px 16px rgba(134, 100, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.nav-button:hover::before {
+  opacity: 1;
 }
 .nav-button:hover::after {
   transform: scaleX(1);
-  transform-origin: bottom left;
 }
+
+/* ACTIVE STATE — PRESSED LIQUID */
 .nav-button:active {
   color: var(--navbar-active);
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
+  background: rgba(82, 26, 224, 0.15);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.2),
+    0 0 12px rgba(149, 100, 255, 0.1);
+  border-color: rgba(69, 0, 179, 0.3);
 }
+.nav-button:active::after {
+  transform: scaleX(0.6);
+  opacity: 0.5;
+}
+
 
 /* ───────────────────────────────────────────────
    RESPONSIVE LAYOUT — MOBILE TO DESKTOP
@@ -127,6 +249,8 @@
 @media (max-width: 480px) {
   .navbar {
     padding: var(--spacing-sm) var(--spacing-md);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
   }
   .nav-buttons {
     gap: var(--spacing-md);
@@ -177,6 +301,8 @@
 @media (min-width: 1441px) {
   .navbar {
     padding: var(--spacing-lg) var(--spacing-xxl);
+    backdrop-filter: blur(32px) saturate(220%);
+    -webkit-backdrop-filter: blur(32px) saturate(220%);
   }
   .nav-button {
     font-size: var(--font-size-xl);
@@ -184,13 +310,26 @@
   }
 }
 
+
 /* ───────────────────────────────────────────────
    TOUCH & UX ENHANCEMENTS
 ─────────────────────────────────────────────── */
 .nav-button {
-  touch-action: manipulation;  /* IMPROVES TAP RESPONSE ON MOBILE */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent; /* REMOVE NATIVE MOBILE TAP FLASH */
 }
 .nav-button:hover,
 .nav-button:focus {
-  user-select: none;           /* PREVENT ACCIDENTAL TEXT SELECTION */
+  user-select: none;
+}
+
+/* REDUCED MOTION — RESPECT USER PREFERENCE */
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .nav-button,
+  .nav-button::before,
+  .nav-button::after {
+    transition: none;
+    animation: none;
+  }
 }
