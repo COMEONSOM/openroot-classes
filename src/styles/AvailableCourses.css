@@ -227,75 +227,393 @@
   color: white;
 }
 
-/* ───────── QR / Success ───────── */
+
+/* =========================================================
+   PAYMENT SUCCESS SECTION — WHITE + VIOLET INVOICE
+   (Drop-in replacement for your current qr-section styles)
+   ======================================================== */
+
+/* SUCCESS CONTAINER */
 .qr-section {
   width: 100%;
-  max-width: 620px;
-  background: var(--bg-card);
+  max-width: 720px;
+  margin: 32px auto 0;
+  padding: 32px 28px 26px;
   border-radius: var(--radius-lg);
-  padding: 40px 30px;
-  box-shadow: var(--shadow-soft);
-  text-align: center;
-}
-.qr-code {
-  width: 220px;
-  margin: 24px auto;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-soft);
-}
-.qr-section h3 {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--success);
-  margin-bottom: 10px;
-}
-.qr-section p {
-  font-size: 0.95rem;
-  color: var(--text-soft);
-}
-.motivator {
-  font-weight: 700;
-  color: var(--primary);
-  margin-top: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
+  border: 1px solid rgba(124, 58, 237, 0.18);
+  box-shadow: 0 22px 60px rgba(15, 23, 42, 0.12);
+  text-align: left;
+  color: var(--text-main);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-/* ───────── Responsive ───────── */
+/* SUCCESS HEADER */
+.qr-section h3 {
+  margin: 0;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-section h3::before {
+  content: "🎉";
+  font-size: 1.4rem;
+}
+
+.qr-section > p {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--text-soft);
+}
+
+.qr-section strong {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.motivator {
+  margin: 4px 0 4px;
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* LAYOUT INSIDE SUCCESS CARD:
+   receipt on top, buttons in a toolbar under it */
+.qr-section-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ============ RECEIPT CARD ============ */
+
+.receipt-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px 20px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 14px 40px rgba(148, 163, 184, 0.28);
+}
+
+/* header row: title + small "PAID" badge */
+.receipt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.receipt-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.receipt-header span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.receipt-badge {
+  font-size: 0.7rem;
+  padding: 4px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(22, 163, 74, 0.09);
+  color: var(--success);
+  border: 1px solid rgba(22, 163, 74, 0.5);
+}
+
+/* sections */
+.receipt-section {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(148, 163, 184, 0.5);
+}
+
+.receipt-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.receipt-section-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+.receipt-section-row span {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.receipt-section-row strong {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.receipt-section-row code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  color: var(--primary);
+  background: rgba(124, 58, 237, 0.06);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+/* footer note */
+.receipt-footer {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.4);
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+
+/* ============ ACTION BUTTONS ============ */
+
+.receipt-actions {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.receipt-actions button {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 10px 26px rgba(124, 58, 237, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease, color 0.2s ease;
+}
+
+/* primary = download */
+.receipt-actions button:first-child {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: #ffffff;
+}
+
+/* secondary = WhatsApp */
+.receipt-actions button:last-child {
+  background: #ffffff;
+  color: var(--primary);
+  border: 1px solid rgba(124, 58, 237, 0.4);
+}
+
+.receipt-actions button:hover {
+  transform: translateY(-2px);
+}
+
+/* mobile */
 @media (max-width: 640px) {
-  .courses-container {
-    padding: 20px 14px;
-  }
-  .courses-container h2{
-    font-size: 1.6rem;
-  }
-  .course-details {
-    padding: 28px 20px;
-  }
   .qr-section {
-    padding: 28px 20px;
+    padding: 24px 18px 20px;
   }
-  .course-stepper {
-    flex-wrap: wrap;
+  .receipt-section-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .receipt-actions {
     justify-content: center;
   }
-  .step {
-    font-size: 10px;
-    padding: 6px 14px;
-  }
 }
-@media (min-width: 641px) and (max-width: 1024px) {
-  .course-list {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
-  .courses-container h2{
-    font-size: 1.8rem;
-  }
-  .step {
-    font-size: 12px;
-    padding: 7px 16px;
-  }
+/* =======================
+   Student Details Modal
+   ======================= */
+
+/* dimmed overlay */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
 }
-@media (min-width: 1025px) {
-   .courses-container h2{
-    font-size: 2rem;
+
+/* modal card */
+.checkout-modal {
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.26);
+  padding: 20px 22px 18px;
+  font-family: var(--font);
+  color: var(--text-main);
+}
+
+/* header row */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.modal-header h4 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.modal-close {
+  border: none;
+  background: #f8fafc;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-soft);
+  transition: background var(--transition), color var(--transition),
+    transform var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--primary-soft);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+/* subtitle */
+.modal-subtitle {
+  margin: 4px 0 10px;
+  font-size: 0.9rem;
+  color: var(--text-soft);
+}
+
+/* body / fields */
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+
+.field input {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  padding: 9px 11px;
+  font-size: 0.9rem;
+  outline: none;
+  background: #f8fafc;
+  color: var(--text-main);
+  transition: border-color var(--transition), box-shadow var(--transition),
+    background var(--transition);
+}
+
+.field input::placeholder {
+  color: var(--text-muted);
+}
+
+.field input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px rgba(124, 58, 237, 0.45);
+  background: #ffffff;
+}
+
+/* inline validation */
+.field-error {
+  font-size: 0.78rem;
+  color: var(--danger);
+}
+
+/* footer buttons */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.modal-secondary,
+.modal-primary {
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+    background 0.2s ease, color 0.2s ease;
+}
+
+/* cancel */
+.modal-secondary {
+  background: #f8fafc;
+  color: var(--text-soft);
+  border: 1px solid rgba(148, 163, 184, 0.8);
+}
+
+.modal-secondary:hover {
+  background: #e5e7eb;
+}
+
+/* primary CTA */
+.modal-primary {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: #ffffff;
+}
+
+.modal-primary:hover {
+  transform: translateY(-1px);
+}
+
+.modal-primary:disabled,
+.modal-secondary:disabled,
+.modal-close:disabled {
+  opacity: 0.7;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* mobile tweaks */
+@media (max-width: 640px) {
+  .checkout-modal {
+    margin: 0 14px;
+    padding: 18px 16px 16px;
   }
 }

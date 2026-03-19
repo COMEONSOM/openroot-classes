@@ -12,6 +12,7 @@
     "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.6.0",
+    "react-to-pdf": "^3.2.2",
     "react-use": "^17.6.0"
   },
   "devDependencies": {
