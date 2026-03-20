@@ -133,6 +133,10 @@
   .study-title {
     font-size: 1.6rem;
   }
+
+  .study-label {
+    font-size: 0.875rem;
+  }
 }
 
 /* Tablet */

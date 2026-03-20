@@ -11,6 +11,7 @@ import e2Thumbnail from "../assets/e2.avif";
 import e3Thumbnail from "../assets/e3.avif";
 import e4Thumbnail from "../assets/e4.avif";
 import e5Thumbnail from "../assets/e5.avif";
+import e6Thumbnail from "../assets/e6.avif";
 
 const VIDEOS = [
   { id: 1, title: "Image to Cinematic Video", url: "https://youtu.be/d3JtfTJ-uVY", thumbnail: e1Thumbnail },
@@ -18,6 +19,7 @@ const VIDEOS = [
   { id: 3, title: "Deep Research using ChatGPT", url: "https://youtu.be/324K9jUF8tQ", thumbnail: e3Thumbnail },
   { id: 4, title: "Building an Electron App", url: "https://youtu.be/S_uSCuhMeok", thumbnail: e4Thumbnail },
   { id: 5, title: "High-CTR Thumbnails Using FLOW", url: "https://youtu.be/39zIVpJhCSU", thumbnail: e5Thumbnail },
+  { id: 6, title: "Suno AI Full Tutorial", url: "https://youtu.be/vLuRuZFAPmk", thumbnail: e6Thumbnail },
 ];
 
 const FreeContent = () => {

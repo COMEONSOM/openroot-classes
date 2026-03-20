@@ -10,6 +10,7 @@ import "../styles/StudyMaterial.css";
 // ============================================================
 // STUDY MATERIAL DATA
 // ============================================================
+import promptAnim from "../assets/lotties/prompt.json";
 import pythonAnim from "../assets/lotties/python.json";
 import sqlAnim from "../assets/lotties/MySQL.json";
 import financeAnim from "../assets/lotties/finance.json";
@@ -17,6 +18,7 @@ import CSEAnim from "../assets/lotties/cse-basics.json";
 import interviewAnim from "../assets/lotties/HR Interview.json"
 
 const studyMaterials = [
+  { title: "PROMPT ENGINEERING", link: "https://drive.google.com/drive/folders/1w793Z3QJj0yorZJvDKMDLT", animation: promptAnim },
   { title: "PYTHON", link: "https://drive.google.com/drive/folders/1IQerh93elt4mBQRdRZ_42yYv4Dv0ipTm", animation: pythonAnim },
   { title: "SQL", link: "https://drive.google.com/drive/folders/1AdrThpT8qlMxuWQenc7LF-ryW4FIpBBx", animation: sqlAnim },
   { title: "FINANCE", link: "https://drive.google.com/drive/folders/1tnPiNCIiElutXDcEveQppmMkbGp1Q8Q1", animation: financeAnim },
